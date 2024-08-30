@@ -21,10 +21,28 @@
     "source=quality-freecodecamp-extensions,target=/root/.vscode-server/extensions,type=volume", // extensions volume
     // And/or for VS Code Insiders
     "source=quality-freecodecamp-extensions-insiders,target=/root/.vscode-server-insiders/extensions,type=volume" // indiders volume
-  ]
+  ],
 
   // Configure tool-specific properties.
-  // "customizations": {},
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "Codeium.codeium"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.fixAll": true,
+          "source.fixAll.eslint": true,
+          "source.organizeImports": true,
+          "addMissingImports": true
+        },
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+      }
+    }
+  }
 
   // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
   // "remoteUser": "root"
