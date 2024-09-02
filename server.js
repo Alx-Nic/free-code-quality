@@ -6,8 +6,11 @@ const session = require("express-session");
 const passport = require("passport");
 const fccTesting = require("./freeCodeCamp/fcctesting.js");
 const { ObjectID } = require("mongodb");
+const LocalStrategy = require("passport-local");
 
 const app = express();
+const showLogin = true;
+const showRegistration = true;
 
 fccTesting(app); //For FCC testing purposes
 app.use("/public", express.static(process.cwd() + "/public"));
@@ -31,12 +34,39 @@ passport.session();
 myDB(async (client) => {
   const myDataBase = await client.db("database").collection("users");
 
-  app.route("/").get((req, res) => {
+  app.route("/").get(async (req, res) => {
     res.render("index", {
       title: "Connected to Database",
       message: "Please log in",
+      showLogin,
     });
   });
+
+  app
+    .route("/login")
+    .post(
+      passport.authenticate("local", { failureRedirect: "/" }),
+      (req, res) => {
+        console.log(`User ${req.user.username} has logged in.`);
+        res.redirect("/profile");
+      }
+    );
+
+  app.route("/profile").get((req, res) => {
+    res.render("profile");
+  });
+
+  passport.use(
+    new LocalStrategy((username, password, done) => {
+      myDataBase.findOne({ username: username }, (err, user) => {
+        console.log(`User ${username} attempted to log in.`);
+        if (err) return done(err);
+        if (!user) return done(null, false);
+        if (password !== user.password) return done(null, false);
+        return done(null, user);
+      });
+    })
+  );
 
   passport.serializeUser((user, doneCB) => {
     doneCB(null, user._id);
