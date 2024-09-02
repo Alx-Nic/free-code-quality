@@ -31,6 +31,13 @@ passport.session();
 myDB(async (client) => {
   const myDataBase = await client.db("database").collection("users");
 
+  app.route("/").get((req, res) => {
+    res.render("index", {
+      title: "Connected to Database",
+      message: "Please log in",
+    });
+  });
+
   passport.serializeUser((user, doneCB) => {
     doneCB(null, user._id);
   });
@@ -46,13 +53,6 @@ myDB(async (client) => {
       title: "e",
       message: "Unable to connect to database",
     });
-  });
-});
-
-app.route("/").get((req, res) => {
-  res.render("index", {
-    title: "Connected to Database",
-    message: "Please log in",
   });
 });
 
