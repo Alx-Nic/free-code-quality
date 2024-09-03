@@ -41,11 +41,9 @@ myDB(async (client) => {
 
   let currentUsers = 0;
   io.on("connection", (socket) => {
-    console.log("A user has connected");
-
     ++currentUsers;
-
-    io.emit("usercount", currentUsers);
+    io.emit("user count", currentUsers);
+    console.log("A user has connected");
   });
 
   app.use((req, res, next) => {
