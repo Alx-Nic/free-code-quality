@@ -44,12 +44,12 @@ myDB(async (client) => {
     ++currentUsers;
     io.emit("user count", currentUsers);
     console.log("A user has connected");
-  });
 
-  io.on("disconnect", () => {
-    --currentUsers;
-    io.emit("user count", currentUsers);
-    console.log("A user has disconnected");
+    socket.on("disconnect", () => {
+      console.log("A user has disconnected");
+      --currentUsers;
+      io.emit("user count", currentUsers);
+    });
   });
 
   app.use((req, res, next) => {
