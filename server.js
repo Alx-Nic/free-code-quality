@@ -46,6 +46,12 @@ myDB(async (client) => {
     console.log("A user has connected");
   });
 
+  io.on("disconnect", () => {
+    --currentUsers;
+    io.emit("user count", currentUsers);
+    console.log("A user has disconnected");
+  });
+
   app.use((req, res, next) => {
     res.status(404).type("text").send("Not Found");
   });
